@@ -2,14 +2,16 @@
   <div class="expand">
     <div>
       <el-button @click="handleAddTop">添加顶级节点</el-button>
-      <TreeEx ref="expandMenuList" class="expand-tree"
-              :data="setTree"
-              node-key="id"
-              highlight-current
-              :props="defaultProps"
-              :expand-on-click-node="false"
-              :default-expanded-keys="defaultExpandKeys"
-              @node-click="handleNodeClick"></TreeEx>
+      <el-tree ref="expandMenuList" class="expand-tree"
+               v-if="isLoadingTree"
+               :data="setTree"
+               node-key="id"
+               highlight-current
+               :props="defaultProps"
+               :expand-on-click-node="false"
+               :render-content="renderContent"
+               :default-expanded-keys="defaultExpandKeys"
+               @node-click="handleNodeClick"></el-tree>
     </div>
   </div>
 </template>
@@ -17,13 +19,14 @@
 <script>
   import TreeRender from '@/components/tree_render'
   import api from '@/resource/api'
-  import TreeEx from './treex.vue'
 
   export default {
-    components: {TreeEx},
     name: 'tree',
     data() {
       return {
+        maxexpandId: api.maxexpandId,//新增节点开始id
+        non_maxexpandId: api.maxexpandId,//新增节点开始id(不更改)
+        isLoadingTree: false,//是否加载节点树
         setTree: api.treelist,//节点树数据
         defaultProps: {
           children: 'children',
@@ -37,7 +40,6 @@
       this.initExpand()
     },
     methods: {
-
       initExpand() {
 //        this.setTree.map((a) => {
 //          this.defaultExpandKeys.push(a.id)
@@ -47,6 +49,22 @@
       handleNodeClick(d, n, s) {//点击节点
         // console.log(d,n)
         d.isEdit = false;//放弃编辑状态
+      },
+      renderContent(h, {node, data, store}) {//加载节点
+        let that = this;
+        return h(TreeRender, {
+          props: {
+            DATA: data,
+            NODE: node,
+            STORE: store,
+            maxexpandId: that.non_maxexpandId
+          },
+          on: {
+            nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
+            nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
+            nodeDel: ((s, d, n) => that.handleDelete(s, d, n))
+          }
+        });
       },
       handleAddTop() {
         this.setTree.push({
