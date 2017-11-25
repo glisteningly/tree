@@ -10,7 +10,9 @@
               :expand-on-click-node="false"
               :default-expanded-keys="defaultExpandKeys"
               @node-click="handleNodeClick"
-              @nodeAdd="handleAdd"
+              @onNodeAdd="handleAdd"
+              @onNodeEdit="handleEdit"
+              @onNodeDelete="handleDelete"
       ></TreeEx>
     </div>
   </div>
@@ -60,24 +62,24 @@
         })
       },
       handleAdd(s, d, n) {//增加节点
-        console.log('add' + d.name)
-//        console.log(s, d, n)
-//        if (n.level >= 6) {
-//          this.$message.error("最多只支持五级！")
-//          return false;
-//        }
-//        //添加数据
-//        d.children.push({
-//          id: ++this.maxexpandId,
-//          name: '新增节点',
-//          pid: d.id,
-//          isEdit: false,
-//          children: []
-//        });
-//        //展开节点
-//        if (!n.expanded) {
-//          n.expanded = true;
-//        }
+        console.log('add ' + d.name)
+        console.log(s, d, n)
+        if (n.level >= 6) {
+          this.$message.error("最多只支持五级！")
+          return false;
+        }
+        //添加数据
+        d.children.push({
+          id: ++this.maxexpandId,
+          name: '新增节点',
+          pid: d.id,
+          isEdit: false,
+          children: []
+        });
+        //展开节点
+        if (!n.expanded) {
+          n.expanded = true;
+        }
       },
       handleEdit(s, d, n) {//编辑节点
         console.log(s, d, n)
