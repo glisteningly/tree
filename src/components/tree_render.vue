@@ -1,14 +1,14 @@
 <template>
 	<span class="tree-expand">
 		<span class="tree-label" v-show="DATA.isEdit">
-			<el-input class="edit" size="mini" autofocus
+			<el-input class="edit" size="small" autofocus
 			v-model="DATA.name"
 			:ref="'treeInput'+DATA.id"
 			@click.stop.native="nodeEditFocus"
 			@blur.stop="nodeEditPass(STORE,DATA,NODE)"
 			@keyup.enter.stop.native="nodeEditPass(STORE,DATA,NODE)"></el-input>
 		</span>
-		<span v-show="!DATA.isEdit" 
+		<span v-show="!DATA.isEdit"
 		:class="[DATA.id > maxexpandId ? 'tree-new tree-label' : 'tree-label']">
 			<span>{{DATA.name}}</span>
 		</span>
