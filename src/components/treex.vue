@@ -6,21 +6,29 @@
     extends: Tree,
 //    mixins: [Tree],
     props: {
+
       renderContent: {
         type: Function,
-        default: (h, {node, data, store}) => {
+        default(h, {node, data, store}) {
           let that = this;
           return h(TreeRender, {
             props: {
               DATA: data,
               NODE: node,
               STORE: store,
-              maxexpandId: that.non_maxexpandId
+//              maxexpandId: that.non_maxexpandId
             },
             on: {
-              nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
-              nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
-              nodeDel: ((s, d, n) => that.handleDelete(s, d, n))
+//              nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
+//              nodeAdd: ((s, d, n) => that.a.methods.handleAdd(s, d, n)),
+//              nodeAdd: ((s, d, n) => console.log(this)),
+//              nodeAdd: ((s, d, n) => this.$options.parent.$emit('nodeAdd', s, d, n)),
+              nodeAdd: ((s, d, n) => this.tree.$emit('nodeAdd', s, d, n)),
+//              nodeAdd: () => {
+//                console.log(that)
+//              },
+//              nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
+//              nodeDel: ((s, d, n) => that.handleDelete(s, d, n))
             }
           });
         }
@@ -33,7 +41,32 @@
     mounted() {
 
     },
-    methods: {}
+    methods: {
+      handleAdd(s, d, n) {//增加节点
+//        console.log(s, d, n)
+        console.log(d)
+//        const that = this
+//        that.$emit('onNodeAdd', d)
+      },
+//      renderContent(h, {node, data, store}) {
+////          let that = this;
+//        return h(TreeRender, {
+//          props: {
+//            DATA: data,
+//            NODE: node,
+//            STORE: store,
+////              maxexpandId: that.non_maxexpandId
+//          },
+//          on: {
+////              nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
+//            nodeAdd: ((s, d, n) => this.handleAdd(s, d, n)),
+////              nodeAdd: ()=>{console.log(this)},
+////              nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
+////              nodeDel: ((s, d, n) => that.handleDelete(s, d, n))
+//          }
+//        });
+//      }
+    }
 
   }
 </script>
